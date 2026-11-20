@@ -39,7 +39,8 @@ else
 fi
 [ -x "$ROCM/bin/hipcc" ] && ok "hipcc có" || fail "Thiếu $ROCM/bin/hipcc (ROCm cài thiếu gói phát triển HIP — nhờ quản lý máy cài 'rocm-hip-sdk')"
 if [ -x "$ROCM/bin/rocminfo" ]; then
-    if "$ROCM/bin/rocminfo" 2>/dev/null | grep -q gfx803; then ok "ROCm nhìn thấy GPU gfx803 (RX570)"; else
+    ROCMINFO_OUT="$("$ROCM/bin/rocminfo" 2>&1 || true)"   # lưu ra biến: grep -q + pipefail sẽ báo nhầm
+    if grep -q gfx803 <<<"$ROCMINFO_OUT"; then ok "ROCm nhìn thấy GPU gfx803 (RX570)"; else
         fail "rocminfo không thấy gfx803 — user có trong nhóm render/video chưa? (id -nG), /dev/kfd có quyền chưa?"
     fi
 fi

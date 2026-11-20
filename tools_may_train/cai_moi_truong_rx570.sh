@@ -44,7 +44,7 @@ echo "== 1. Kiểm tra máy"
 # GPU
 if command -v lspci >/dev/null 2>&1; then
     GPU_LINE="$(lspci -nn | grep -iE 'vga|display|3d' | grep -i '1002:' || true)"
-    if echo "$GPU_LINE" | grep -qiE 'ellesmere|polaris|rx 4[78]0|rx 5[789]0|67df|67ef'; then
+    if grep -qiE 'ellesmere|polaris|rx 4[78]0|rx 5[789]0|67df|67ef' <<<"$GPU_LINE"; then
         ok "GPU AMD Polaris: $(echo "$GPU_LINE" | head -1 | cut -c1-110)"
     elif [ -n "$GPU_LINE" ]; then
         warn "GPU AMD nhưng không phải Polaris/RX570: $(echo "$GPU_LINE" | head -1 | cut -c1-110) — image gfx803 có thể không hợp."
@@ -56,8 +56,9 @@ else
 fi
 # Driver amdgpu + thiết bị ROCm
 # /sys/module/amdgpu có cả khi amdgpu là module lẫn khi build sẵn trong kernel (lsmod có thể không có với user thường)
-DRIVER_IN_USE="$(lspci -k 2>/dev/null | grep -iA3 -E 'vga|display|3d' | grep -i 'driver in use' | head -1 | sed 's/.*: //')"
-if [ -d /sys/module/amdgpu ] || lsmod 2>/dev/null | grep -q '^amdgpu' || [ "$DRIVER_IN_USE" = "amdgpu" ]; then
+DRIVER_IN_USE="$(lspci -k 2>/dev/null | grep -iA3 -E 'vga|display|3d' | grep -i 'driver in use' | head -1 | sed 's/.*: //' || true)"
+LSMOD_OUT="$(lsmod 2>/dev/null || true)"
+if [ -d /sys/module/amdgpu ] || grep -q '^amdgpu' <<<"$LSMOD_OUT" || [ "$DRIVER_IN_USE" = "amdgpu" ]; then
     ok "Driver amdgpu đang chạy${DRIVER_IN_USE:+ (GPU dùng driver: $DRIVER_IN_USE)}"
 elif [ "$DRIVER_IN_USE" = "radeon" ] || [ -d /sys/module/radeon ]; then
     fail "GPU đang dùng driver 'radeon' cũ, không phải amdgpu. Thêm vào GRUB_CMDLINE_LINUX_DEFAULT
@@ -82,7 +83,7 @@ fi
 # Nhóm quyền
 ME="$(id -un)"
 for g in video render; do
-    if id -nG "$ME" | tr ' ' '\n' | grep -qx "$g"; then ok "User thuộc nhóm $g"; else
+    if grep -qx "$g" <<<"$(id -nG "$ME" | tr ' ' '\n')"; then ok "User thuộc nhóm $g"; else
         fail "User chưa thuộc nhóm $g -> sudo usermod -aG video,render $ME  rồi ĐĂNG XUẤT/khởi động lại"
     fi
 done
