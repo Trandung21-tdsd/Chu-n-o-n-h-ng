@@ -6,12 +6,15 @@
 #
 #    ./tools_may_train/dong_goi_tu_mac.sh                      # -> ~/Downloads/throat_ai_linux_<ngày>.tar.gz
 #    ./tools_may_train/dong_goi_tu_mac.sh /Volumes/USB/goi.tar.gz
+#    ./tools_may_train/dong_goi_tu_mac.sh --chi-du-lieu         # chỉ dữ liệu (code lấy bằng git clone trên Linux)
 #
 #  Trên Linux:  mkdir -p ~/throat_ai && tar -xzf throat_ai_linux_<ngày>.tar.gz -C ~/throat_ai
 # ==========================================================================
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT="$(dirname "$HERE")"
+ONLY_DATA=0
+if [ "${1:-}" = "--chi-du-lieu" ]; then ONLY_DATA=1; shift; fi
 OUT="${1:-$HOME/Downloads/throat_ai_linux_$(date +%Y%m%d).tar.gz}"
 cd "$PROJECT"
 
@@ -35,13 +38,13 @@ done
 LIST="$(mktemp)"
 trap 'rm -f "$LIST"' EXIT
 {
-    printf '%s\n' src/throat_ai configs tools_may_train pyproject.toml requirements.txt README.md \
-        data/BAGLS-VF_train data/BAGLS-VF_test data/prepared/bagls_3class .cache/torch
+    [ "$ONLY_DATA" = 1 ] || printf '%s\n' src/throat_ai configs tools_may_train pyproject.toml requirements.txt README.md
+    printf '%s\n' data/BAGLS-VF_train data/BAGLS-VF_test data/prepared/bagls_3class .cache/torch
     find data/archive-2 -name '*.meta'
 } > "$LIST"
 
 echo "Đang đóng gói $(wc -l < "$LIST" | tr -d ' ') mục -> $OUT (vài phút)..."
-COPYFILE_DISABLE=1 tar -czf "$OUT" \
+COPYFILE_DISABLE=1 tar -czf "$OUT" --no-xattrs --no-mac-metadata \
     --exclude '__pycache__' --exclude '.DS_Store' --exclude '._*' \
     --exclude 'tools_may_train/telemetry_logs' \
     -T "$LIST"

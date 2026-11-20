@@ -26,11 +26,12 @@ TTY_ARGS=()
 if [ -t 0 ] && [ -t 1 ]; then TTY_ARGS=(-it); fi
 mkdir -p "$PROJECT/.cache/home"
 
-exec docker run --rm "${TTY_ARGS[@]}" \
-    --device=/dev/kfd --device=/dev/dri "${GROUP_ARGS[@]}" \
+exec docker run --rm ${TTY_ARGS[@]+"${TTY_ARGS[@]}"} \
+    --device=/dev/kfd --device=/dev/dri ${GROUP_ARGS[@]+"${GROUP_ARGS[@]}"} \
     --ipc=host --security-opt seccomp=unconfined \
     --user "$(id -u):$(id -g)" \
-    -e HOME=/workspace/.cache/home \
+    -e HOME=/workspace/.cache/home -e USER="$(id -un)" -e LOGNAME="$(id -un)" \
+    -e TRAIN_EXTRA_ARGS="${TRAIN_EXTRA_ARGS:-}" \
     -e THROAT_AI_IN_DOCKER=1 \
     -v "$PROJECT":/workspace \
     -w /workspace/tools_may_train \

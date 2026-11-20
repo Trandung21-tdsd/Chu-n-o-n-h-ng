@@ -58,6 +58,14 @@ mkdir -p ~/throat_ai && tar -xzf throat_ai_linux_<ngày>.tar.gz -C ~/throat_ai
 cd ~/throat_ai/tools_may_train
 chmod +x *.sh
 ```
+**Hoặc lấy code bằng git** (dữ liệu không có trên GitHub vì nằm trong `.gitignore`): trên Mac tạo gói chỉ dữ liệu
+`./tools_may_train/dong_goi_tu_mac.sh --chi-du-lieu`, rồi trên Linux:
+```bash
+git clone https://github.com/Trandung21-tdsd/Chu-n-o-n-h-ng.git ~/throat_ai
+tar -xzf throat_ai_linux_<ngày>.tar.gz -C ~/throat_ai        # thêm data/ + data/prepared vào thư mục clone
+```
+Đừng bỏ qua `data/prepared/bagls_3class`: thiếu nó, `train.py` sẽ tự chia lại train/val trên Linux và kết quả không
+còn so sánh được với máy Mac.
 
 ### Bước 3 — Cài môi trường (1 lần)
 ```bash
@@ -66,8 +74,17 @@ sudo usermod -aG docker,video,render $USER      # rồi ĐĂNG XUẤT / khởi �
 ./cai_moi_truong_rx570.sh --check                # chỉ kiểm tra máy (GPU, driver, kernel, quyền, ổ đĩa)
 ./cai_moi_truong_rx570.sh                        # build (1–3 giờ) + kiểm tra GPU + train thử 4 model
 ```
-Kết thúc phải thấy `[✔] Phép tính trên GPU đúng.` và 4 dòng `[✔] ResNet-50 / Swin-T / MobileNetV2 / DenseNet-121`.
+Kết thúc phải thấy `[✔] Phép tính trên GPU đúng (cả chiều xuôi lẫn lan truyền ngược).` và 4 dòng
+`[✔] ResNet-50 / Swin-T / MobileNetV2 / DenseNet-121`. Phần kiểm tra so GPU với CPU cho: nhân ma trận, tích chập,
+BatchNorm và **gradient** (lan truyền ngược) — vì image chỉ biên dịch lại PyTorch/rocBLAS cho gfx803, còn MIOpen
+(tích chập, BatchNorm) là bản ROCm 6.4 gốc.
 Kiểm tra lại bất cứ lúc nào: `./chay_trong_docker.sh python3 kiem_tra_gpu.py`
+
+Chạy thử nhanh toàn bộ luồng (1 epoch, ~vài phút) trước khi train thật:
+```bash
+TRAIN_EXTRA_ARGS="--epochs 1 --out ../outputs/thu_nghiem_rx570" ./train_may_linux.sh 3
+```
+Tuỳ chọn thêm (bộ kiểm thử của dự án, chạy trên CPU trong container): `./chay_trong_docker.sh python3 -m pytest -q ../tests`
 
 ### Bước 4 — Train
 ```bash
@@ -89,6 +106,7 @@ Kiểm tra lại bất cứ lúc nào: `./chay_trong_docker.sh python3 kiem_tra_
 - Lần đầu mỗi model, MIOpen (thư viện tích chập của AMD) **biên dịch kernel** nên epoch đầu chậm; cache lưu ở
   `<dự án>/.cache/miopen` nên các lần sau nhanh hơn.
 - Bị ngắt (mất điện, Ctrl+C): chạy lại đúng lệnh — model đã train xong được bỏ qua.
+- `TRAIN_EXTRA_ARGS="..."` chuyển thêm tham số cho `train.py` / `throat_ai.benchmark` (vd. `--epochs 20 --seeds 42 43`).
 
 ---
 

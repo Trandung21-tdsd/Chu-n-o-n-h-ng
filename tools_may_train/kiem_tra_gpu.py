@@ -53,11 +53,30 @@ def main() -> int:
         return 1
     err_mm = (mm - a @ b).abs().max().item()
     err_conv = (conv - torch.nn.functional.conv2d(x, w, padding=1)).abs().max().item()
-    print(f"  Sai khác GPU vs CPU: matmul {err_mm:.2e} | conv2d {err_conv:.2e}")
-    if not (err_mm < 1e-2 and err_conv < 1e-3):
+
+    # Lan truyền ngược (train cần) + BatchNorm: MIOpen trong image là bản ROCm 6.4 gốc, không build lại cho gfx803.
+    def grads(dev):
+        xi = x.clone().to(dev).requires_grad_(True)
+        wi = w.clone().to(dev).requires_grad_(True)
+        bn = torch.nn.BatchNorm2d(16).to(dev).train()
+        out = bn(torch.nn.functional.conv2d(xi, wi, padding=1)).relu()
+        (out * out).mean().backward()
+        return out.detach().cpu(), xi.grad.cpu(), wi.grad.cpu()
+
+    try:
+        gpu_out, gpu_gx, gpu_gw = grads(device)
+    except Exception as exc:
+        print(f"[✖] Lỗi khi lan truyền ngược trên GPU: {type(exc).__name__}: {exc}")
+        return 1
+    cpu_out, cpu_gx, cpu_gw = grads(torch.device("cpu"))
+    rel = lambda g, c: ((g - c).abs().max() / (c.abs().max() + 1e-12)).item()  # noqa: E731
+    err_bn, err_gx, err_gw = rel(gpu_out, cpu_out), rel(gpu_gx, cpu_gx), rel(gpu_gw, cpu_gw)
+    print(f"  Sai khác GPU vs CPU: matmul {err_mm:.2e} | conv2d {err_conv:.2e} | conv+BatchNorm {err_bn:.2e} | "
+          f"gradient ảnh {err_gx:.2e} | gradient trọng số {err_gw:.2e}")
+    if not (err_mm < 1e-2 and err_conv < 1e-3 and max(err_bn, err_gx, err_gw) < 1e-3):
         print("[✖] GPU cho KẾT QUẢ SAI — không được train (thử kernel khác / image khác, xem README).")
         return 1
-    print("[✔] Phép tính trên GPU đúng.")
+    print("[✔] Phép tính trên GPU đúng (cả chiều xuôi lẫn lan truyền ngược).")
     if args.quick:
         return 0
 

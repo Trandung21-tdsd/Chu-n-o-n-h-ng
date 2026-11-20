@@ -9,6 +9,7 @@
 #  ./train_may_linux.sh 5                  chạy lần lượt cả 4 model
 #  ./train_may_linux.sh 1 16 FP32 2        model, batch, precision, accumulation (batch hiệu dụng = 16 x 2)
 #  NO_DOCKER=1 ./train_may_linux.sh 3      chạy thẳng bằng python3 của máy (NVIDIA/CPU, không dùng Docker)
+#  TRAIN_EXTRA_ARGS="--epochs 1" ./train_may_linux.sh 3     thêm tham số cho train.py (vd. chạy thử 1 epoch)
 # ==========================================================================
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -63,7 +64,7 @@ run_one() {
     echo ""
 
     # LỆNH TRAIN: pipeline của dự án (train.py cùng thư mục) — kết quả ở outputs/bagls_3class_linux_rx570/
-    LENH_TRAIN="python3 '$HERE/train.py' --model '$MODEL_NAME' --batch_size $BATCH_SIZE --accumulation $ACCUM --precision $PRECISION"
+    LENH_TRAIN="python3 '$HERE/train.py' --model '$MODEL_NAME' --batch_size $BATCH_SIZE --accumulation $ACCUM --precision $PRECISION ${TRAIN_EXTRA_ARGS:-}"
 
     # File telemetry_*.csv ghi vào tools_may_train/telemetry_logs/
     mkdir -p "$HERE/telemetry_logs"
