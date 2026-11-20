@@ -55,9 +55,15 @@ else
     warn "Không có lspci (cài pciutils) — bỏ qua kiểm tra tên GPU."
 fi
 # Driver amdgpu + thiết bị ROCm
-if lsmod 2>/dev/null | grep -q '^amdgpu'; then ok "Driver amdgpu đang chạy"; else
-    fail "Driver amdgpu chưa nạp. Polaris có thể đang dùng driver 'radeon' cũ: thêm vào GRUB_CMDLINE_LINUX_DEFAULT
+# /sys/module/amdgpu có cả khi amdgpu là module lẫn khi build sẵn trong kernel (lsmod có thể không có với user thường)
+DRIVER_IN_USE="$(lspci -k 2>/dev/null | grep -iA3 -E 'vga|display|3d' | grep -i 'driver in use' | head -1 | sed 's/.*: //')"
+if [ -d /sys/module/amdgpu ] || lsmod 2>/dev/null | grep -q '^amdgpu' || [ "$DRIVER_IN_USE" = "amdgpu" ]; then
+    ok "Driver amdgpu đang chạy${DRIVER_IN_USE:+ (GPU dùng driver: $DRIVER_IN_USE)}"
+elif [ "$DRIVER_IN_USE" = "radeon" ] || [ -d /sys/module/radeon ]; then
+    fail "GPU đang dùng driver 'radeon' cũ, không phải amdgpu. Thêm vào GRUB_CMDLINE_LINUX_DEFAULT
          'radeon.si_support=0 radeon.cik_support=0 amdgpu.si_support=1 amdgpu.cik_support=1' rồi sudo update-grub && reboot"
+else
+    fail "Không thấy driver amdgpu (lspci -k: '${DRIVER_IN_USE:-không rõ}'). Máy có đúng là có card AMD không? Xem: lspci -k | grep -iA3 vga"
 fi
 [ -e /dev/kfd ] && ok "/dev/kfd có" || fail "Thiếu /dev/kfd (ROCm không truy cập được GPU)"
 [ -d /dev/dri ] && ok "/dev/dri có" || fail "Thiếu /dev/dri"

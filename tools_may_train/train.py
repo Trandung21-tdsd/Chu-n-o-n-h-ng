@@ -84,10 +84,11 @@ def main() -> None:
     device, vram = gpu_report(args.allow_cpu or args.plan or bool(os.environ.get("THROAT_AI_ALLOW_CPU")))
     batch = args.batch_size or (32 if model not in HEAVY else 16)
     accumulation = args.accumulation or max(1, 32 // batch)
-    if vram is not None and vram < 6 and model in HEAVY and batch > 8:  # RX570 bản 4 GB
-        accumulation = max(1, (batch * accumulation) // 8)
-        batch = 8
-        print(f"[!] VRAM {vram:.1f} GB: giảm batch còn 8 x accumulation {accumulation} (giữ batch hiệu dụng) để tránh hết bộ nhớ.")
+    limit = (8 if model in HEAVY else 16) if (vram is not None and vram < 6) else None  # RX570 bản 4 GB
+    if limit and batch > limit:
+        accumulation = max(1, (batch * accumulation) // limit)
+        batch = limit
+        print(f"[!] VRAM {vram:.1f} GB: giảm batch còn {batch} x accumulation {accumulation} (giữ batch hiệu dụng) để tránh hết bộ nhớ.")
     print(f"[*] Model {args.model} -> {model} | batch {batch} x {accumulation} = {batch * accumulation} | {args.precision.upper()}")
 
     from throat_ai import benchmark, prepare

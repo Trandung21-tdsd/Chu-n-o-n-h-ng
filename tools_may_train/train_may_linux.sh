@@ -66,10 +66,11 @@ run_one() {
     # LỆNH TRAIN: pipeline của dự án (train.py cùng thư mục) — kết quả ở outputs/bagls_3class_linux_rx570/
     LENH_TRAIN="python3 '$HERE/train.py' --model '$MODEL_NAME' --batch_size $BATCH_SIZE --accumulation $ACCUM --precision $PRECISION ${TRAIN_EXTRA_ARGS:-}"
 
-    # File telemetry_*.csv ghi vào tools_may_train/telemetry_logs/
+    # File telemetry_*.csv ghi vào tools_may_train/telemetry_logs/; lệnh train chạy từ tools_may_train/
+    # (đường dẫn tương đối trong TRAIN_EXTRA_ARGS, vd. --out ../outputs/x, tính từ tools_may_train/).
     mkdir -p "$HERE/telemetry_logs"
     (cd "$HERE/telemetry_logs" && python3 "$HERE/run_train_with_telemetry.py" \
-        --cmd "$LENH_TRAIN" \
+        --cmd "cd '$HERE' && $LENH_TRAIN" \
         --model "$MODEL_NAME" \
         --batch_size "$BATCH_SIZE" \
         --precision "$PRECISION")
