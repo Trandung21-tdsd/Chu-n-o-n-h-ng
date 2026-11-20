@@ -19,7 +19,8 @@ Code train là pipeline của dự án (chia theo video, early stopping, chọn 
 |---|---|
 | `train_may_linux.sh` | **Script chính.** Menu chọn 4 model (hoặc chạy cả 4); tự chạy bên trong Docker RX570; bật telemetry ngầm |
 | `train.py` | Gọi pipeline của dự án cho 1 model (được `train_may_linux.sh` gọi) |
-| `cai_moi_truong_rx570.sh` | **Cài môi trường 1 lần**: kiểm tra máy, build PyTorch gfx803 + image `throat-ai-rx570`, kiểm tra GPU |
+| `cai_moi_truong_rx570.sh` | **Cài môi trường 1 lần (Docker)**: kiểm tra máy, build PyTorch gfx803 + image `throat-ai-rx570`, kiểm tra GPU |
+| `cai_khong_docker_rx570.sh` | **Cài môi trường 1 lần (không Docker, không sudo)**: dùng ROCm 5.7 sẵn trên máy, biên dịch PyTorch gfx803 vào `.rx570-venv/` |
 | `Dockerfile.rx570`, `requirements_rx570.txt` | Image train = PyTorch gfx803 + thư viện của dự án (giữ nguyên bản torch gfx803) |
 | `chay_trong_docker.sh` | Chạy 1 lệnh bất kỳ trong container (GPU + thư mục dự án gắn vào `/workspace`) |
 | `kiem_tra_gpu.py` | Kiểm tra GPU tính đúng (so với CPU) + train thử 3 bước mỗi model |
@@ -85,6 +86,21 @@ Chạy thử nhanh toàn bộ luồng (1 epoch, ~vài phút) trước khi train 
 TRAIN_EXTRA_ARGS="--epochs 1 --out ../outputs/thu_nghiem_rx570" ./train_may_linux.sh 3
 ```
 Tuỳ chọn thêm (bộ kiểm thử của dự án, chạy trên CPU trong container): `./chay_trong_docker.sh python3 -m pytest -q ../tests`
+
+### Bước 3 (cách khác) — KHÔNG Docker, KHÔNG sudo: máy đã cài sẵn ROCm 5.7
+Dùng khi không có quyền `sudo` hoặc ổ hệ thống không đủ chỗ cho Docker, và máy đã có `/opt/rocm-5.7.*`
+(ROCm 5.7 là bản cuối còn chạy được gfx803). Script biên dịch PyTorch 2.3 + TorchVision 0.18 cho gfx803 theo cách của
+[gfx803_rocm57_pt23](https://github.com/robertrosenbusch/gfx803_rocm57_pt23), cài vào `.rx570-venv/` trong thư mục dự án
+(mã nguồn + bản build ~20–30 GB ở `.build-rx570/` — **đặt dự án trên ổ lớn như `/data`**).
+```bash
+tmux new -s caidat
+cd <dự án>/tools_may_train
+./cai_khong_docker_rx570.sh --check      # ROCm 5.7, hipcc, thư viện ROCm, GPU gfx803, gcc/g++, RAM, ổ đĩa
+./cai_khong_docker_rx570.sh              # biên dịch 2–4 giờ + kiểm tra GPU + train thử 4 model
+```
+Xong thì `./train_may_linux.sh` **tự dùng** `.rx570-venv` (không cần Docker). Bị ngắt giữa chừng: chạy lại, phần đã tải /
+đã biên dịch được dùng lại. RAM ít, biên dịch bị `Killed`: `MAX_JOBS=2 ./cai_khong_docker_rx570.sh`.
+Cài xong có thể xoá `.build-rx570/` để lấy lại ổ đĩa.
 
 ### Bước 4 — Train
 ```bash

@@ -11,3 +11,5 @@ outputs/
 .DS_Store
 tools_may_train/telemetry_logs/
 .cache/
+.rx570-venv/
+.build-rx570/

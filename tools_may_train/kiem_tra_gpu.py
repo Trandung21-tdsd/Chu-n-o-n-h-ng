@@ -34,8 +34,8 @@ def main() -> int:
         print(f"  {key}={os.environ.get(key, '(chưa đặt)')}")
     if not torch.cuda.is_available():
         print("[✖] torch.cuda.is_available() = False -> PyTorch KHÔNG thấy GPU.\n"
-              "    RX570: phải chạy trong Docker gfx803 (./chay_trong_docker.sh ...), user thuộc nhóm video + render,\n"
-              "    có /dev/kfd; kernel 6.13/6.14 bị lỗi với gfx803 (xem README).")
+              "    RX570 cần PyTorch biên dịch cho gfx803: môi trường .rx570-venv (cai_khong_docker_rx570.sh)\n"
+              "    hoặc Docker (cai_moi_truong_rx570.sh). User phải thuộc nhóm video + render, có /dev/kfd.")
         return 1
     props = torch.cuda.get_device_properties(0)
     print(f"[+] GPU: {props.name} | VRAM {props.total_memory / 2**30:.1f} GB | arch {getattr(props, 'gcnArchName', '?')}")

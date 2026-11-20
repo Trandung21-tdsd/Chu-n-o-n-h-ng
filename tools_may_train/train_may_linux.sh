@@ -15,13 +15,23 @@ set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$HERE"
 
-# Ngoài Docker + có image RX570 -> chạy lại chính script này bên trong container (GPU AMD cần PyTorch gfx803).
+# Chọn môi trường có PyTorch cho RX570 (gfx803):
+#   1) .rx570-venv do cai_khong_docker_rx570.sh tạo (ROCm 5.7 sẵn trên máy, KHÔNG Docker)
+#   2) image Docker throat-ai-rx570 do cai_moi_truong_rx570.sh tạo
+NATIVE_ENV="${RX570_ENV:-$(dirname "$HERE")/.rx570-venv}"
 if [ -z "${THROAT_AI_IN_DOCKER:-}" ] && [ -z "${NO_DOCKER:-}" ]; then
-    if command -v docker >/dev/null 2>&1 && docker image inspect "${THROAT_AI_IMAGE:-throat-ai-rx570:latest}" >/dev/null 2>&1; then
+    if [ -f "$NATIVE_ENV/bin/activate" ]; then
+        set +u
+        # shellcheck disable=SC1091
+        source "$NATIVE_ENV/bin/activate"
+        set -u
+        echo "[*] Dùng môi trường RX570 không Docker: $NATIVE_ENV"
+    elif command -v docker >/dev/null 2>&1 && docker image inspect "${THROAT_AI_IMAGE:-throat-ai-rx570:latest}" >/dev/null 2>&1; then
         exec "$HERE/chay_trong_docker.sh" ./train_may_linux.sh "$@"
+    else
+        echo "[!] Chưa có môi trường RX570 -> chạy bằng python3 hiện tại (GPU AMD RX570 sẽ KHÔNG được dùng)."
+        echo "    Cài (không Docker, không sudo, máy có ROCm 5.7): ./cai_khong_docker_rx570.sh"
     fi
-    echo "[!] Chưa có image Docker throat-ai-rx570 -> chạy bằng python3 của máy (GPU AMD RX570 sẽ KHÔNG được dùng)."
-    echo "    Cài môi trường RX570: ./cai_moi_truong_rx570.sh"
 fi
 
 CHOICE="${1:-}"
