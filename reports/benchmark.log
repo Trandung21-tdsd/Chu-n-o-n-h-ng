@@ -1,0 +1,48 @@
+device mps
+resnet18 CLAHE False features 0 / 11045
+resnet18 CLAHE False features 1280 / 11045
+resnet18 CLAHE False features 2560 / 11045
+resnet18 CLAHE False features 3840 / 11045
+resnet18 CLAHE False features 5120 / 11045
+resnet18 CLAHE False features 6400 / 11045
+resnet18 CLAHE False features 7680 / 11045
+resnet18 CLAHE False features 8960 / 11045
+resnet18 CLAHE False features 10240 / 11045
+/Users/trandung/Documents/ChatGPT/chẩn đoán hình ảnh nội soi họng/src/throat_ai/benchmark.py:58: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:214.)
+  with torch.inference_mode():pv=head(z[va]).softmax(1).numpy()
+20261116_113729_26e915_resnet18_clahe0_dedup0_s42 val patient macro F1 0.2846 epochs 11
+20261116_113729_26e915_resnet18_clahe0_dedup1_s42 val patient macro F1 0.2751 epochs 11
+resnet18 CLAHE True features 0 / 11045
+resnet18 CLAHE True features 1280 / 11045
+resnet18 CLAHE True features 2560 / 11045
+resnet18 CLAHE True features 3840 / 11045
+resnet18 CLAHE True features 5120 / 11045
+resnet18 CLAHE True features 6400 / 11045
+resnet18 CLAHE True features 7680 / 11045
+resnet18 CLAHE True features 8960 / 11045
+resnet18 CLAHE True features 10240 / 11045
+20261116_113729_26e915_resnet18_clahe1_dedup0_s42 val patient macro F1 0.298 epochs 11
+20261116_113729_26e915_resnet18_clahe1_dedup1_s42 val patient macro F1 0.2776 epochs 11
+mobilenet_v3_small CLAHE False features 0 / 11045
+mobilenet_v3_small CLAHE False features 1280 / 11045
+mobilenet_v3_small CLAHE False features 2560 / 11045
+mobilenet_v3_small CLAHE False features 3840 / 11045
+mobilenet_v3_small CLAHE False features 5120 / 11045
+mobilenet_v3_small CLAHE False features 6400 / 11045
+mobilenet_v3_small CLAHE False features 7680 / 11045
+mobilenet_v3_small CLAHE False features 8960 / 11045
+mobilenet_v3_small CLAHE False features 10240 / 11045
+20261116_113729_26e915_mobilenet_v3_small_clahe0_dedup0_s42 val patient macro F1 0.3497 epochs 11
+20261116_113729_26e915_mobilenet_v3_small_clahe0_dedup1_s42 val patient macro F1 0.3603 epochs 16
+mobilenet_v3_small CLAHE True features 0 / 11045
+mobilenet_v3_small CLAHE True features 1280 / 11045
+mobilenet_v3_small CLAHE True features 2560 / 11045
+mobilenet_v3_small CLAHE True features 3840 / 11045
+mobilenet_v3_small CLAHE True features 5120 / 11045
+mobilenet_v3_small CLAHE True features 6400 / 11045
+mobilenet_v3_small CLAHE True features 7680 / 11045
+mobilenet_v3_small CLAHE True features 8960 / 11045
+mobilenet_v3_small CLAHE True features 10240 / 11045
+20261116_113729_26e915_mobilenet_v3_small_clahe1_dedup0_s42 val patient macro F1 0.393 epochs 13
+20261116_113729_26e915_mobilenet_v3_small_clahe1_dedup1_s42 val patient macro F1 0.393 epochs 13
+SELECTED {"run_id": "20261116_113729_26e915_mobilenet_v3_small_clahe1_dedup0_s42", "checkpoint": "/Users/trandung/Documents/ChatGPT/ch\u1ea9n \u0111o\u00e1n h\u00ecnh \u1ea3nh n\u1ed9i soi h\u1ecdng/runs/20261116_113729_26e915_mobilenet_v3_small_clahe1_dedup0_s42/model.pt", "criterion": "val_patient_macro_f1", "split_sha256": "c8461deb70b01f9313ec881ebd6c6a8285cdd230617c88584ec1d9c869d1098d", "test_used_for_selection": false}

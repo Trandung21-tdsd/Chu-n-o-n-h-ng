@@ -1,0 +1,18 @@
+# Cài nhanh: pip install -r requirements.txt && pip install -e . --no-deps
+# (hoặc chỉ cần: pip install -e ".[test]"; máy có GPU NVIDIA: pip install -e ".[nvidia,test]")
+# PyTorch có CUDA trên Windows/Linux: cài theo lệnh ở https://pytorch.org/get-started/locally/ TRƯỚC, rồi mới cài file này.
+torch>=2.2
+torchvision>=0.17
+numpy>=1.24
+pandas>=2.0
+scikit-learn>=1.3
+pillow>=10.0
+opencv-python-headless>=4.8
+ImageHash>=4.3
+openpyxl>=3.1
+psutil>=5.9
+matplotlib>=3.7
+pytest>=7
+# Tùy chọn:
+# nvidia-ml-py>=12.535   # bắt buộc khi profiling cho TATO trên GPU NVIDIA
+# timm>=0.9              # thêm kiến trúc ngoài torchvision

@@ -1,0 +1,53 @@
+{
+  "_readme": [
+    "Chỉ dùng bộ BAGLS-VF: BAGLS-VF_train để train (+ tách validation theo video), BAGLS-VF_test làm tập TEST cố định.",
+    "BAGLS-VF không có nhãn bệnh -> nhãn lấy từ metadata BAGLS gốc (archive-2/*/*.meta, trường 'Subject disorder status').",
+    "Nhóm bệnh theo bài giảng Kĩ năng khám TMH (ĐH Y Dược TP.HCM): thanh quản bình thường / tổn thương thực thể / rối loạn chức năng.",
+    "Đường dẫn tương đối tính từ thư mục dự án. Đổi khi chạy: --source-root bagls_vf_train=<đường_dẫn> (tương tự bagls_vf_test).",
+    "scene_link_threshold: phát hiện video KHÁC mã nhưng CÙNG cảnh quay (BAGLS chia sẵn train/test vẫn có: test 7 ~ train 399, 86) -> gộp 1 nhóm, video train dính test bị cách ly.",
+    "max_images_per_unit: số frame tối đa mỗi video cho train/val (video tốc độ cao có 100 frame gần giống nhau). phash_radius -1: không so pHash (đã gom theo video)."
+  ],
+
+  "bagls_3class": {
+    "description": "BAGLS-VF — nội soi tốc độ cao thanh môn: Bình thường / Tổn thương thực thể / Rối loạn chức năng",
+    "anatomy": "thanh quản (larynx) — hạ họng/thanh quản theo bài giảng",
+    "modality": "nội soi tốc độ cao (high-speed videoendoscopy), ảnh xám là chủ yếu",
+    "sources": [
+      {"name": "bagls_vf_train", "adapter": "bagls_vf", "part": "train", "root": "data/BAGLS-VF_train",
+       "meta_root": "data/archive-2", "label_scheme": "3class"},
+      {"name": "bagls_vf_test", "adapter": "bagls_vf", "part": "test", "root": "data/BAGLS-VF_test",
+       "meta_root": "data/archive-2", "label_scheme": "3class"}
+    ],
+    "preprocess": {"geometry": "center_square"},
+    "phash_radius": -1,
+    "max_images_per_unit": 20,
+    "scene_link_threshold": 0.99,
+    "augment": {"hflip": true, "vflip": false, "rotate": 10, "scale": [0.9, 1.1], "translate": 0.05, "brightness": 0.15, "contrast": 0.15},
+    "display_names": {
+      "Normal": "Thanh quản bình thường",
+      "Organic_lesion": "Tổn thương thực thể dây thanh (hạt, polyp, nang, phù Reinke, u hạt, u nhú, ung thư...)",
+      "Functional": "Rối loạn chức năng / vận động thanh quản (căng cơ, đóng thanh môn không kín, liệt...)"
+    }
+  },
+
+  "bagls_binary": {
+    "description": "BAGLS-VF — Bình thường / Có bệnh lý thanh quản",
+    "anatomy": "thanh quản (larynx)",
+    "modality": "nội soi tốc độ cao (high-speed videoendoscopy), ảnh xám là chủ yếu",
+    "sources": [
+      {"name": "bagls_vf_train", "adapter": "bagls_vf", "part": "train", "root": "data/BAGLS-VF_train",
+       "meta_root": "data/archive-2", "label_scheme": "binary"},
+      {"name": "bagls_vf_test", "adapter": "bagls_vf", "part": "test", "root": "data/BAGLS-VF_test",
+       "meta_root": "data/archive-2", "label_scheme": "binary"}
+    ],
+    "preprocess": {"geometry": "center_square"},
+    "phash_radius": -1,
+    "max_images_per_unit": 20,
+    "scene_link_threshold": 0.99,
+    "augment": {"hflip": true, "vflip": false, "rotate": 10, "scale": [0.9, 1.1], "translate": 0.05, "brightness": 0.15, "contrast": 0.15},
+    "display_names": {
+      "Normal": "Thanh quản bình thường",
+      "Disorder": "Có bệnh lý thanh quản (thực thể hoặc chức năng)"
+    }
+  }
+}

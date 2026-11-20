@@ -1,0 +1,13 @@
+{
+  "_readme": [
+    "4 model train trên máy Linux GPU AMD RX570 (tools_may_train/train_may_linux.sh): ResNet-50, Swin-T, MobileNetV2, DenseNet-121.",
+    "RX570 8 GB, FP32 (Polaris không tăng tốc FP16). Batch hiệu dụng 32 = batch_size x accumulation, giống ma trận chính.",
+    "tools_may_train/train.py ghi đè batch/accumulation/precision/workers theo tham số dòng lệnh."
+  ],
+  "configs": [
+    {"config_id": "R01", "model": "resnet50", "batch_size": 16, "accumulation": 2, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "R02", "model": "swin_t", "batch_size": 16, "accumulation": 2, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "R03", "model": "mobilenet_v2", "batch_size": 32, "accumulation": 1, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "R04", "model": "densenet121", "batch_size": 16, "accumulation": 2, "precision": "FP32", "workers": 4, "resolution": 224}
+  ]
+}

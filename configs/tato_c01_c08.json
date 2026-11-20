@@ -1,0 +1,67 @@
+[
+  {
+    "config_id": "C01",
+    "backbone": "MobileNetV3-Small",
+    "batch_size": 16,
+    "precision": "FP32",
+    "workers": 2,
+    "resolution": 224
+  },
+  {
+    "config_id": "C02",
+    "backbone": "MobileNetV3-Small",
+    "batch_size": 32,
+    "precision": "AMP",
+    "workers": 4,
+    "resolution": 224
+  },
+  {
+    "config_id": "C03",
+    "backbone": "EfficientNet-B0",
+    "batch_size": 16,
+    "precision": "FP32",
+    "workers": 4,
+    "resolution": 224
+  },
+  {
+    "config_id": "C04",
+    "backbone": "EfficientNet-B0",
+    "batch_size": 32,
+    "precision": "AMP",
+    "workers": 4,
+    "resolution": 224
+  },
+  {
+    "config_id": "C05",
+    "backbone": "EfficientNet-B0",
+    "batch_size": 64,
+    "precision": "AMP",
+    "workers": 4,
+    "resolution": 224
+  },
+  {
+    "config_id": "C06",
+    "backbone": "ResNet-18",
+    "batch_size": 32,
+    "precision": "FP32",
+    "workers": 4,
+    "resolution": 224
+  },
+  {
+    "config_id": "C07",
+    "backbone": "ResNet-50",
+    "batch_size": 16,
+    "precision": "AMP",
+    "workers": 4,
+    "resolution": 224
+  },
+  {
+    "config_id": "C08",
+    "backbone": "ResNet-50",
+    "batch_size": 32,
+    "precision": "AMP",
+    "workers": 4,
+    "resolution": 224
+  }
+]
+

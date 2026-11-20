@@ -1,0 +1,4 @@
+file,rows,duplicate_rows,duplicate_paths,patient_split_overlap
+larynx_binary.csv,11144,0,0,0.0
+larynx_file_list.csv,11144,0,0,
+larynx_histology.csv,11144,0,0,0.0

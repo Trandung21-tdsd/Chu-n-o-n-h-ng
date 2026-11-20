@@ -1,0 +1,29 @@
+{
+  "_readme": [
+    "Phân đoạn thanh môn BAGLS-VF: mask màu đã gán sẵn — XANH LÁ = dây thanh bên TRÁI ẢNH, XANH DƯƠNG = dây thanh bên PHẢI ẢNH, ĐỎ = thanh môn (khe hở giữa 2 dây thanh / lỗ khí), ĐEN = nền.",
+    "Trên ảnh nội soi, bên trái ảnh thường là dây thanh PHẢI của bệnh nhân (ảnh soi như nhìn đối diện) — pipeline chỉ gọi theo phía trên ảnh.",
+    "Chia train/val THEO VIDEO, dùng lại đúng phân chia của task phân loại (data/prepared/<classifier_task>/manifest.csv) để val/test của 2 model trùng nhau; video không có nhãn bệnh (không có trong manifest) chỉ đưa vào train.",
+    "BAGLS-VF_test là test cố định (chỉ đánh giá 1 lần sau khi đã chọn model theo validation).",
+    "scene_link_threshold: 2 video KHÁC mã nhưng có >= scene_link_min_matches cặp frame gần giống hệt (tương quan ảnh thu nhỏ 16x16 >= ngưỡng) được coi là CÙNG 1 lần quay (vd. video test 7 ~ train 399, 86; test 55 ~ train 595) -> video train/val đó bị bỏ để không lọt sang test.",
+    "Đường dẫn tương đối tính từ thư mục dự án."
+  ],
+  "task": "bagls_seg",
+  "classifier_task": "bagls_3class",
+  "train": {"root": "data/BAGLS-VF_train", "image_dir": "BAGLS_image", "mask_dir": "BAGLS_mask", "mask_prefix": "mask_"},
+  "test": {"root": "data/BAGLS-VF_test", "image_dir": "test_images", "mask_dir": "test_masks", "mask_prefix": ""},
+  "meta_root": "data/archive-2",
+  "classes": ["background", "left_fold", "right_fold", "glottis"],
+  "class_colors": {"background": [0, 0, 0], "left_fold": [0, 255, 0], "right_fold": [0, 0, 255], "glottis": [255, 0, 0]},
+  "display_names": {
+    "background": "Nền",
+    "left_fold": "Dây thanh bên trái ảnh (xanh lá)",
+    "right_fold": "Dây thanh bên phải ảnh (xanh dương)",
+    "glottis": "Thanh môn / khe thanh môn (đỏ)"
+  },
+  "geometry": "center_square",
+  "max_frames_train": 20,
+  "max_frames_val": 10,
+  "scene_link_threshold": 0.99,
+  "scene_link_min_matches": 2,
+  "augment": {"hflip": true, "rotate": 10, "scale": [0.9, 1.1], "translate": 0.05, "brightness": 0.15, "contrast": 0.15}
+}

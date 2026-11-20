@@ -1,0 +1,19 @@
+{
+  "_readme": [
+    "Ma trận benchmark CHẨN ĐOÁN: 9 kiến trúc từ rất nhẹ đến nặng, cùng batch hiệu dụng 32 (batch × accumulation).",
+    "Model nặng dùng batch 16 × tích lũy 2 để vừa GPU 4 GB (RTX 3050 Laptop). Hết bộ nhớ => run ghi 'out_of_memory'.",
+    "Thêm model: copy 1 dòng, đổi config_id + model (xem: python -m throat_ai.benchmark --list-models).",
+    "precision AMP chỉ chạy trên GPU NVIDIA/Apple MPS; CPU sẽ bỏ qua (hoặc dùng --amp-fallback-fp32)."
+  ],
+  "configs": [
+    {"config_id": "M01", "model": "mobilenet_v3_small", "batch_size": 32, "accumulation": 1, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "M02", "model": "mobilenet_v3_large", "batch_size": 32, "accumulation": 1, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "M03", "model": "efficientnet_b0", "batch_size": 32, "accumulation": 1, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "M04", "model": "resnet18", "batch_size": 32, "accumulation": 1, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "M05", "model": "densenet121", "batch_size": 16, "accumulation": 2, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "M06", "model": "resnet50", "batch_size": 16, "accumulation": 2, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "M07", "model": "efficientnet_v2_s", "batch_size": 16, "accumulation": 2, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "M08", "model": "convnext_tiny", "batch_size": 16, "accumulation": 2, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "M09", "model": "swin_t", "batch_size": 16, "accumulation": 2, "precision": "FP32", "workers": 4, "resolution": 224}
+  ]
+}

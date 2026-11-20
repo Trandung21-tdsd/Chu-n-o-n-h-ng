@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+data/
+runs/
+outputs/
+*.pt
+*.npy
+*.tmp
+.DS_Store
+tools_may_train/telemetry_logs/
+.cache/

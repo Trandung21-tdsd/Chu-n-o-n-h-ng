@@ -1,0 +1,7 @@
+dataset,anatomy,labels,status,source_url
+CE-NBI,larynx,histopathology,local audited,https://www.nature.com/articles/s41597-023-02629-7
+BAGLS-VF,vocal folds,segmentation,local excluded from disease training,https://link.springer.com/article/10.1186/s13104-026-07972-7
+BAGLS,glottis,segmentation + disorder metadata,local audited separately,https://www.nature.com/articles/s41597-020-0526-3
+Moccia2017,larynx NBI tissue,He/Hbv/Le/IPCL,downloaded and checksummed; separate task,https://zenodo.org/records/1003200
+ENTRep,ENT incl throat,anatomy normal/abnormal narrative,candidate; access/terms/patient mapping pending,https://aichallenge.hcmus.edu.vn/acm-mm-2025/entrep
+Laryngoscope8,larynx,8 diagnostic groups incl normal,candidate; not downloaded,https://github.com/greenyin/Laryngoscope8

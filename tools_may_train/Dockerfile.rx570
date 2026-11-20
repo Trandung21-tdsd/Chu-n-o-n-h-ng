@@ -1,0 +1,28 @@
+# Image train cho AMD RX570 / RX580 / RX590 (Polaris, gfx803).
+# Nền: image PyTorch 2.6 + ROCm 6.4 biên dịch riêng cho gfx803 của dự án cộng đồng
+#   https://github.com/robertrosenbusch/gfx803_rocm   (ROCm/PyTorch chính thức đã bỏ hỗ trợ gfx803)
+# cai_moi_truong_rx570.sh build image nền đó trước, rồi build file này:
+#   docker build -f Dockerfile.rx570 -t throat-ai-rx570:latest .
+ARG BASE_IMAGE=rocm64_gfx803_pytorch:2.6
+FROM ${BASE_IMAGE}
+
+ENV HSA_OVERRIDE_GFX_VERSION=8.0.3 \
+    ROC_ENABLE_PRE_VEGA=1 \
+    PYTORCH_ROCM_ARCH=gfx803 \
+    TORCH_BLAS_PREFER_HIPBLASLT=0 \
+    MIOPEN_LOG_LEVEL=3 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONIOENCODING=utf-8 \
+    THROAT_AI_IN_DOCKER=1
+
+COPY requirements_rx570.txt /tmp/requirements_rx570.txt
+
+# Khoá phiên bản torch/torchvision/numpy đang có để pip KHÔNG thay bằng bản thường (không chạy được gfx803).
+RUN python3 -c "import torch, torchvision; print('torch', torch.__version__, '| torchvision', torchvision.__version__, '| hip', torch.version.hip)" \
+ && pip3 list --format=freeze | grep -iE '^(torch|torchvision|torchaudio|numpy)==' > /tmp/constraints.txt \
+ && cat /tmp/constraints.txt \
+ && pip3 install --break-system-packages --no-cache-dir -c /tmp/constraints.txt -r /tmp/requirements_rx570.txt \
+ && python3 -c "import torch, torchvision, cv2, pandas, sklearn, imagehash, matplotlib; print('OK - torch van la ban gfx803:', torch.__version__)"
+
+WORKDIR /workspace/tools_may_train
+CMD ["bash"]

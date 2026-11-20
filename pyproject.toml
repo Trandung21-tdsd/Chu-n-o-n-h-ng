@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "throat-ai-research"
+version = "2.0.0"
+description = "Benchmark nhiều model phân loại ảnh nội soi họng/thanh quản + xuất dữ liệu profiling cho TATO"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "torch>=2.2",
+  "torchvision>=0.17",
+  "numpy>=1.24",
+  "pandas>=2.0",
+  "scikit-learn>=1.3",
+  "pillow>=10.0",
+  "opencv-python-headless>=4.8",
+  "ImageHash>=4.3",
+  "openpyxl>=3.1",
+  "psutil>=5.9",
+  "matplotlib>=3.7",
+]
+
+[project.optional-dependencies]
+nvidia = ["nvidia-ml-py>=12.535"]   # telemetry GPU NVIDIA (công suất, nhiệt, throttling) cho TATO
+timm = ["timm>=0.9"]                # thêm model ngoài torchvision: --models timm:<tên>
+test = ["pytest>=7"]
+
+[project.scripts]
+throat-prepare = "throat_ai.prepare:main"
+throat-benchmark = "throat_ai.benchmark:main"
+throat-evaluate = "throat_ai.evaluate:main"
+throat-predict = "throat_ai.predict:main"
+throat-tato-export = "throat_ai.tato_export:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

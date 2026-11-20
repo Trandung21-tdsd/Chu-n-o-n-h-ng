@@ -1,0 +1,36 @@
+{
+  "status": "uncertain",
+  "scope": "CE-NBI laryngeal lesion classification; no healthy control class",
+  "run_id": "20261116_113729_26e915_mobilenet_v3_small_clahe1_dedup0_s42",
+  "top3": [
+    {
+      "label": "Reinkes_edema",
+      "name_vi": "Phù Reinke",
+      "score": 0.2069547325372696
+    },
+    {
+      "label": "Other_benign",
+      "name_vi": "Nhóm tổn thương lành tính khác",
+      "score": 0.17489629983901978
+    },
+    {
+      "label": "SCC",
+      "name_vi": "Ung thư biểu mô tế bào vảy (nhãn dự đoán)",
+      "score": 0.15934228897094727
+    }
+  ],
+  "probabilities": {
+    "Carcinoma_in_situ": 0.13965685665607452,
+    "Cyst": 0.01185778807848692,
+    "High_grade_dysplasia": 0.050047751516103745,
+    "Hyperkeratosis": 0.058292027562856674,
+    "Low_grade_dysplasia": 0.04472518712282181,
+    "Other_benign": 0.17489629983901978,
+    "Papilloma": 0.06319330632686615,
+    "Polyp": 0.09103374183177948,
+    "Reinkes_edema": 0.2069547325372696,
+    "SCC": 0.15934228897094727
+  },
+  "threshold": 0.6,
+  "note": "Điểm softmax chưa hiệu chuẩn, không phải xác suất mắc bệnh. Ngưỡng từ chối chỉ là heuristic, không phát hiện được ảnh ngoài phân phối. Cần bác sĩ đánh giá; không xác nhận ung thư bằng ảnh này."
+}

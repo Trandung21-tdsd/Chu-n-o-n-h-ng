@@ -1,0 +1,111 @@
+metadata 59250
+{
+  "BAGLS-VF_train": {
+    "files": 111501,
+    "extensions": {
+      "": 1,
+      ".png": 111500
+    },
+    "folders": {
+      ".": 1,
+      "BAGLS_mask": 55750,
+      "BAGLS_image": 55750
+    }
+  },
+  "BAGLS-VF_test": {
+    "files": 7001,
+    "extensions": {
+      "": 1,
+      ".png": 7000
+    },
+    "folders": {
+      ".": 1,
+      "test_images": 3500,
+      "test_masks": 3500
+    }
+  },
+  "archive-2": {
+    "files": 180789,
+    "extensions": {
+      "": 1,
+      ".mp4": 1839,
+      ".meta": 60449,
+      ".png": 118500
+    },
+    "folders": {
+      ".": 1,
+      "raw/raw": 1920,
+      "videos/videos": 1118,
+      "training/training": 167250,
+      "test/test": 10500
+    }
+  },
+  "bagls_disorders": {
+    "healthy": 35400,
+    "Muscle tension dysphonia": 10400,
+    "": 3500,
+    "Muscle tension dysphonia with M. thyroarythaenoideus atrophy": 1000,
+    "Muscle tension dysphonia with nodules": 1000,
+    "Muscle tension dysphonia with vocal insufficiency and M. thyroarythaenoideus atrophy": 800,
+    "Vocal insufficiency and M. thyroarythaenoideus atrophy": 600,
+    "functional": 500,
+    "Muscle tension dysphonia with contact granuloma": 400,
+    "edema": 350,
+    "Muscle tension dysphonia with vocal insufficiency": 300,
+    "Polyp": 250,
+    "Bilateral Reinke's edema (right more than left)": 200,
+    "Midmembranous swelling (mainly right vocal fold) with hourglass-shaped insufficient glottic closure": 200,
+    "Minimal anterior mucosal irregularity right vocal fold ": 200,
+    "Paresis": 200,
+    "Posterior insufficient glottic closure": 200,
+    "polyp": 200,
+    "Laryngitis": 200,
+    "Reinke's edema right vocal fold with hourglass-shaped insufficient glottic closure": 150,
+    "paresis": 150,
+    "laryngitis": 150,
+    "scar": 150,
+    "Fibrotic/stiff right vocal fold": 100,
+    "None (higher phonation)": 100,
+    "cyst": 100,
+    "Anterior insufficient glottic closure": 100,
+    "Lateral-posterior vocal fold cyst": 100,
+    "Vocal fold nodules with hourglass insufficient glottic closure and teleangectasia": 100,
+    "Vocal insufficiency and contact granuloma": 100,
+    "Extreme polipoid pendulating edema obstructing almost complete glottis": 100,
+    "Irregular vibration anterior and middle portion of both vocal folds": 100,
+    "Bilateral Reinke's edema": 100,
+    "None (half year after diagnosis of small vocal nodules)": 100,
+    "Insufficient glottic closure: posterior": 100,
+    "Right vocal fold polyp (with hourglass-shaped insufficient glottic closure)": 100,
+    "Cyst vocal fold left with posterior insufficient glottic closure (high phonation) ": 100,
+    "Right vocal fold polyp with contraleral edema ": 100,
+    "carcinoma": 100,
+    "Bowed/oval insufficient glottic closure (left more than right); stifness right vocal fold": 100,
+    "Posterior insufficient glottic closure (high phonation)": 100,
+    "Vocal fold atrophy with complete glottic closure": 100,
+    "papilloma": 100,
+    "Vocal fold nodules": 100,
+    "leucoplacia": 100,
+    "spasmodic dysphonia": 100,
+    "None (one year after presumption of a pseudocyst/sulcus in left vocal fold)": 50,
+    "Vocal fold nodules (high phonation)": 50,
+    "Lateral-posterior vocal fold cyst (high phonation)": 50,
+    "Cyst vocal fold left (posterior insufficient glottic closure) ": 50,
+    "None (half year post-phonomicrosurgery for polipoid mid-membranous lesions)": 50,
+    "Reinke's edema right vocal fold (earlier it was bilateral)": 50,
+    "Post-resection of extreme polipoid pendulating edema right vocal folds; extreme polipoid pendulating edema obstructing almost complete glottis left vocal folds": 50,
+    "Hourglass-shaped insufficient glottic closure (high phonation)": 50,
+    "Bilateral vergeture with bowed insufficient glottic closure": 50
+  },
+  "bagls_video_id_overlap": 0,
+  "exact_hash_duplicate_extra_by_role": {
+    "image": 3501,
+    "mask": 4120
+  },
+  "notes": [
+    "BAGLS-VF derives from BAGLS: do not count copies as independent patients.",
+    "Identical all-black segmentation masks can be valid; identical mask alone does not imply duplicate input.",
+    "Video Id is a recording identifier; do not claim verified patient independence across recordings without subject mapping.",
+    "Disorder status in BAGLS is clinical metadata, not automatically a histopathological image diagnosis; kept out of CE-NBI classifier."
+  ]
+}

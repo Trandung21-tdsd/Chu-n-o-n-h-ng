@@ -1,0 +1,35 @@
+{
+  "images": 11045,
+  "patients": 209,
+  "classes": [
+    "Carcinoma_in_situ",
+    "Cyst",
+    "High_grade_dysplasia",
+    "Hyperkeratosis",
+    "Low_grade_dysplasia",
+    "Other_benign",
+    "Papilloma",
+    "Polyp",
+    "Reinkes_edema",
+    "SCC"
+  ],
+  "exact_duplicate_extra": 4,
+  "near_pairs": 6729,
+  "cross_patient_near_pairs": 349,
+  "ratios_requested": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "split_images": {
+    "train": 8076,
+    "test": 1578,
+    "val": 1391
+  },
+  "split_patients": {
+    "train": 147,
+    "test": 31,
+    "val": 31
+  },
+  "split_sha256": "c8461deb70b01f9313ec881ebd6c6a8285cdd230617c88584ec1d9c869d1098d"
+}

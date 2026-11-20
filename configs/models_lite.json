@@ -1,0 +1,13 @@
+{
+  "_readme": [
+    "Ma trận NHẸ: 4 kiến trúc ít tham số/ít phép tính, train nhanh, chạy được trên laptop yếu/CPU.",
+    "Dùng: python -m throat_ai.benchmark --task cenbi_10class --matrix configs/models_lite.json",
+    "Giảm thêm chi phí: --resolution 192 (ít phép tính hơn ~27% so với 224), --epochs 20, --workers 2."
+  ],
+  "configs": [
+    {"config_id": "L01", "model": "mobilenet_v3_small", "batch_size": 32, "accumulation": 1, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "L02", "model": "shufflenet_v2_x1_0", "batch_size": 32, "accumulation": 1, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "L03", "model": "efficientnet_b0", "batch_size": 32, "accumulation": 1, "precision": "FP32", "workers": 4, "resolution": 224},
+    {"config_id": "L04", "model": "resnet18", "batch_size": 32, "accumulation": 1, "precision": "FP32", "workers": 4, "resolution": 224}
+  ]
+}
